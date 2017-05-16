@@ -1,0 +1,149 @@
+package aldaÜbung6;
+import java.util.*;
+
+public class Main {
+
+	public static void main(String[] args) {
+		boolean running = true;
+		Random rndStream = new Random();
+		java.util.Scanner scanner = new Scanner(System.in);
+		while(running){
+			System.out.println("Bitte wählen Sie aus: ");
+			System.out.println("[1] für Aufgabe 1");
+			System.out.println("[2] für Aufgabe 2");
+			System.out.println("[0] um das Programm zu beenden");
+			int choose = scanner.nextInt();
+			switch(choose){
+			case 1:
+				System.out.println("Bitte die Länge des Arrays eingeben: ");
+				int lengthArray = scanner.nextInt();
+				int intArray[] = new int[lengthArray];
+				
+				for(int i = 0; i < intArray.length; i++){
+					intArray[i] = rndStream.nextInt(200)-100;
+					System.out.println((i+1) + " " + intArray[i]);
+				}
+				MergeSort mS = new MergeSort();
+				System.out.println("Anzahl negativer Zahlen: " + mS.rmeth(intArray, 0, intArray.length-1) + "\n");
+				break;
+			case 2:
+				IntList list1 = new IntList();
+				IntList list2 = new IntList();
+				System.out.println("Bitte die Länge der Liste eingeben: ");
+				int lengthList = scanner.nextInt();
+				for(int i = 0; i < lengthList; i++){
+					list1.addAtEnd(rndStream.nextInt(40)+40);
+				}	
+				System.out.println("Printing List1: ");
+				list1.printList();
+				System.out.println("Printing List2: ");
+				list1.ListInsert(list1, list2).printList();
+				break;
+			case 0: 
+				System.out.println("Programm wird beendet...");
+				running = false;
+			}
+		}
+		scanner.close();
+		System.out.println("*waves Goodbye*");
+	}
+}
+
+
+package aldaÜbung6;
+
+public class IntList {
+	public Node head;
+	
+	public IntList(){
+		head = null;
+	}
+	public void addAtEnd(int n){
+		Node newNode = new Node(n);
+		if(head == null){
+			head = newNode;
+		} else {
+			Node nd = head;
+			while(nd.next != null){
+				nd = nd.next;
+			}
+			nd.next = newNode;
+		}
+	}
+	public void addAtSP(int n, IntList list){
+		Node prev = list.head;
+		for(Node nd = list.head.next; nd != null; nd = nd.next){
+			if(n <= nd.value){
+				Node newNode = new Node(n);
+				newNode.next = nd;
+				prev.next = newNode;
+				return;
+			}
+			prev = prev.next;
+		}
+		list.addAtEnd(n);
+	}
+	public void addFront(int n, IntList list){
+		Node newNode = new Node(n);
+		newNode.next = list.head;
+		list.head = newNode;
+	}
+	public void printList(){
+		for(Node n = head; n != null; n = n.next){
+			System.out.println(n.value);
+		}
+	}
+	public IntList ListInsert(IntList list1, IntList list2){
+		for(Node n = list1.head; n != null; n = n.next){
+			if(list2.head == null){
+				list2.addAtEnd(n.value);
+			} else {
+				if(n.value < list2.head.value){
+					list2.addFront(n.value, list2);
+				} else {
+					list2.addAtSP(n.value, list2);
+				}
+			}
+		}
+		return list2;
+	}
+}
+
+
+package aldaÜbung6;
+
+public class MergeSort {
+	int counter = 0;
+	public int rmeth(int[] arr, int left, int right){
+		if(left < right){
+			int m = (left + right) / 2;
+			rmeth(arr, left, m);
+			rmeth(arr, m+1, right);
+			if(arr[left] < 0){
+				arr[left] = 0;
+				counter++;
+			}
+			if(arr[right] < 0){
+				arr[right] = 0;
+				counter++;
+			}
+		}
+		return counter;
+	}
+}
+
+
+package aldaÜbung6;
+
+public class Node {
+	public int value;
+	public Node next;
+	public Node(){
+		value = 0;
+		next = null;
+	}
+	public Node(int v){
+		value = v;
+		next = null;
+	}
+}

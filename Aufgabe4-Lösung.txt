@@ -1,0 +1,197 @@
+package alda‹bung4;
+
+public class Main {
+
+	public static void main(String[] args) {
+		
+		int select;
+		String company;
+		boolean sorted = false;
+		
+		java.util.Scanner scanner = new java.util.Scanner(System.in);
+		System.out.println("[1] for sequence sort by course and name");
+		System.out.println("[2] for binary sort by course and name");
+		System.out.println("[3] for sequence sort by course only");
+		System.out.println("[4] for binary sort by course only");
+		select = scanner.nextInt();
+		StockTickArray sTArray = new StockTickArray();
+		if(select == 1) {
+			sTArray.createStockTickArray();
+			sTArray.sortStockTickArray(1);
+		} 
+		else if(select == 2) {
+			sTArray.createStockTickArray();
+ 			sTArray.sortStockTickArray(2);
+		}
+		else if(select == 3) {
+			sTArray.createStockTickArray();
+ 			sTArray.sortStockTickArray(3);
+		}
+		else if(select == 4) {
+			sTArray.createStockTickArray();
+ 			sTArray.sortStockTickArray(4);
+		}
+		else {
+			System.out.println("Wrong input, programm is exiting now.");
+			System.exit(0);
+		}
+		System.out.println("testing assortion of the Array...");
+		for(int r = 0; r < sTArray.firmenArray.length-1; r++){
+			if(sTArray.firmenArray[r].getKurs() < sTArray.firmenArray[r+1].getKurs() || sTArray.firmenArray[r].getSymbol().compareTo(sTArray.firmenArray[r+1].getSymbol()) < 0){
+				sorted = true;
+			}
+		}
+		if(sorted){
+			System.out.println("Array is sorted.");
+			System.out.println("do you want to search for Company? y/n ");
+			String search = scanner.next();
+			if(search.equals("y")  || search.equals("yes") || search.equals("j") || search.equals("ja")){
+				System.out.println("Please enter the Company-Name you're searching for: ");
+				company = scanner.next();
+				for(int i = 0; i < sTArray.firmenArray.length; i++){
+					if(sTArray.firmenArray[i].getSymbol().equals(company)){
+						System.out.println("Company " + sTArray.firmenArray[i].getSymbol() + ", stock-market-price: " + sTArray.firmenArray[i].getKurs());
+						continue;
+					}
+				}
+			}
+		} else {
+			System.out.println("Array is not sorted.");
+		}
+		System.out.println("Do you wish to print the Array? y/n ");
+		String search2 = scanner.next();
+		if(search2.equals("y")  || search2.equals("yes") || search2.equals("j") || search2.equals("ja")){
+			for(int z = 1; z < sTArray.firmenArray.length+1; z++) {
+				System.out.println(z + " Firma: " + sTArray.firmenArray[z-1].getSymbol() + " Kurs: " + sTArray.firmenArray[z-1].getKurs());
+			}
+		}
+		System.out.println("Compare-Counter: " + sTArray.compCounter);	
+		scanner.close();
+	}
+
+}
+
+
+package alda‹bung4;
+
+public class StockTickArray {
+	
+	public StockTick[] firmenArray = new StockTick[100];
+	int i,j,x,y,l,r,m;
+	int compCounter = 0;
+	
+	public StockTick[] createStockTickArray(){
+		for(int i = 0; i < firmenArray.length; i++) {
+			StockTick sTick = new StockTick();
+			firmenArray[i] = sTick.generateStockTick();
+		}
+		return firmenArray;
+	}
+	public void sortStockTickArray(int choose) {
+		if(choose == 1){
+			sequenceSortKurs();
+			sequenceSortName();
+		} 
+		else if(choose == 2) {
+			binarySortKurs();
+			binarySortName();
+		}
+		else if(choose == 3) {
+			sequenceSortKurs();
+		}
+		else if(choose == 4) {
+			binarySortKurs();
+		}
+	}
+	public void sequenceSortKurs(){
+		for(i = 1; i < firmenArray.length; i++) {
+			StockTick x = firmenArray[i];
+			j = i;
+			while(j > 0 && (x.getKurs() < firmenArray[j-1].getKurs())){
+				firmenArray[j] = firmenArray[j-1];
+				j--;
+				compCounter++;
+			}
+			firmenArray[j] = x;	
+		}
+	}
+	public void binarySortKurs(){
+		for(i = 1; i < firmenArray.length; i++){
+			StockTick x = firmenArray[i];
+			l = 0;
+			r = i-1;
+			while(l <= r) {
+				m = (l+r)/2;
+				if(x.getKurs() < firmenArray[m].getKurs()) {
+					r = m-1;
+				} else {
+					l = m+1;
+				}
+				compCounter++;
+			}
+			for(j = i-1; j >= l; j--){
+				firmenArray[j+1] = firmenArray[j];
+				firmenArray[l] = x;
+			}
+		}
+	}
+	public void sequenceSortName(){
+		for(i = 1; i < firmenArray.length; i++) {
+			StockTick x = firmenArray[i];
+			j = i;
+			
+			while(j > 0 && (x.getSymbol().compareTo(firmenArray[j - 1].getSymbol()) < 0)){
+				firmenArray[j] = firmenArray[j-1];
+				j--;
+				compCounter++;
+			}
+			firmenArray[j] = x;
+		}
+	}	
+	public void binarySortName(){
+		for(i = 1; i < firmenArray.length; i++){
+			StockTick x = firmenArray[i];
+			l = 0;
+			r = i-1;
+			while(l <= r) {
+				m = (l+r)/2;
+				if(x.getSymbol().compareTo(firmenArray[m].getSymbol()) < 0){
+					r = m-1;
+				} else {
+					l = m+1;
+				}
+				compCounter++;
+			}
+			for(j = i-1; j >= l; j--){
+				firmenArray[j+1] = firmenArray[j];
+				firmenArray[l] = x;
+			}
+		}
+	}
+	
+}
+
+
+package alda‹bung4;
+import java.util.Random;
+
+public class StockTick {
+	private String symbol;
+	private int kurs;
+	public Random rndStream;
+	public String[] firmenName = {"IBM", "CIS", "HWP", "GOOGL", "ORCL", "GPRO", "BABA", "AAPL", "SAP",	"MSFT"};
+	
+	public StockTick generateStockTick(){
+		this.rndStream = new Random();
+		StockTick sTick = new StockTick();
+		sTick.symbol = firmenName[rndStream.nextInt(10)];
+		sTick.kurs = rndStream.nextInt(11)+50;
+		return sTick;
+	}
+	public String getSymbol(){
+		return this.symbol;
+	}
+	public int getKurs(){
+		return this.kurs;
+	}
+}

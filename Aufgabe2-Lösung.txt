@@ -1,0 +1,91 @@
+package alda‹bung2;
+import java.util.Random;
+
+public class StockTick {
+	private double kurs;
+	private Random rndStream;
+	public StockTick()
+	{
+		this.rndStream = new Random();
+	}
+	void setKurs(double letztKurs, float kursDiff)
+	{
+		this.kurs = letztKurs+kursDiff;
+	}
+	public double getKurs()
+	{
+		return kurs;
+	}
+	public int setStartKurs()
+	{
+		int startKurs = rndStream.nextInt(100)+500;
+		return startKurs;
+	}
+	public float setKursDiff()
+	{
+		float kursDiff = rndStream.nextInt(60)-30;
+		return kursDiff;
+	}
+	
+}
+
+
+
+	package alda‹bung2;
+
+public class Main {
+
+	public static void main(String[] args) {
+		int indexMax = 0;
+		int indexMin = 0;
+		double relMax = 0;
+		final java.util.Scanner SCANNER = new java.util.Scanner(System.in);
+		
+		System.out.println("Bitte geben Sie die Anzahl der Tage an: ");
+		int arrayLength = SCANNER.nextInt();
+		SCANNER.close();
+		StockTick[] boersenKurs = new StockTick[arrayLength];
+		
+		for(int i = 0; i < boersenKurs.length; i++)
+		{
+			boersenKurs[i]= new StockTick();
+			if(i < 1)
+			{
+				boersenKurs[i].setKurs(0, boersenKurs[i].setStartKurs());
+			} else {	
+				boersenKurs[i].setKurs(boersenKurs[i - 1].getKurs(), boersenKurs[i].setKursDiff());
+			}
+		}
+		for(int i = 0; i < boersenKurs.length; i++)
+		{
+			for(int j = i + 1; j < boersenKurs.length; j++)
+			{
+				double highPerc = (boersenKurs[j].getKurs()/boersenKurs[i].getKurs());
+				if(highPerc>relMax)
+				{
+					relMax = highPerc;
+					indexMin=i;
+					indexMax=j;
+				}
+			}
+		}
+		relMax-=1;
+		relMax*=10000;
+		relMax=(int) relMax;
+		relMax/=100;
+		for(int i = 0; i<boersenKurs.length; i++)
+		{
+			if(i < 1) {
+			System.out.print((int) boersenKurs[i].getKurs() + " ");
+			} else {
+			System.out.print(((int)boersenKurs[i].getKurs()-(int)boersenKurs[i-1].getKurs()) +" ");
+			}
+		}
+		System.out.println("");
+		System.out.println("Der Beste Tag zum Kauf w‰re der "+ (indexMin+1) + ". Tag");
+		System.out.println("Der Beste Tag zum Verkauf w‰re der "+ (indexMax+1) + ". Tag");
+		System.out.println("Der erzielte Gewinn betr‰gt damit: "+ (relMax +"%"));
+
+	}
+
+}

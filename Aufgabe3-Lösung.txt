@@ -1,0 +1,183 @@
+package aldaÜbung3;
+import java.io.*;
+
+public class Main {
+
+	public static void main(String[] args) {
+		File datei = new File("C:\\Users\\Michael Bernhardt\\Desktop\\HTWG\\2. Semester\\Algorithmen und Datenstrukturen\\Übungen\\testKommentar.txt");
+		Reader reader = null;
+		Stack stack = new Stack();
+		boolean setWrong = false;
+		//Anlegen von Variablen, anlegen des Readers und des Dateipfades
+		try
+		{
+			reader = new FileReader(datei);
+			for(int c; ( c = reader.read() ) != -1; ) {
+				char chr = (char) c;
+				//Datei wird durchlaufen und jeder Char wird zurückgegeben
+				if(chr == '/') {
+					if(stack.getTopChar() == '*') {
+						stack.pop();
+						if(stack.getTopChar() == 'µ') {
+							stack.pop();
+						} else {
+							setWrong = true;
+						}
+					} 
+					else if(stack.getTopChar() == '/') {
+						stack.pop();
+					} else {
+						stack.push(chr);
+					}
+					
+				}
+				else if(chr == '*') {
+					if(stack.getTopChar() == '/') {
+						stack.pop();
+						stack.push('µ');
+					} else {
+						if(stack.getTopChar() == '*') {
+							stack.pop();
+						} else {
+							stack.push(chr);
+						}
+					}
+				}
+/*
+				if(chr == '(' || chr == '[' || chr == '{'){
+					if(!stack.isFull()){
+						stack.push(chr);
+					} else {
+						System.out.println("Stack ist voll!");
+					}
+				}
+				//Sollte das Element eine Klammer-auf sein, wird diese auf den Stack gepushed, wenn der Stack nicht voll ist
+				else if(chr == ')'){
+					if(stack.getTopChar() == '(') {
+						if(!stack.isEmpty()){
+							stack.pop();
+						} else {
+							setWrong = true;
+						}
+					} else {
+						System.out.println("Klammern falsch gesetzt!");
+						setWrong = true;
+					}
+				}
+				else if(chr == '}'){
+					if(stack.getTopChar() == '{') {
+						if(!stack.isEmpty()){
+							stack.pop();
+						} else {
+							setWrong = true;
+						}
+					} else {
+						System.out.println("Klammern falsch gesetzt!");
+						setWrong = true;
+					}
+				}
+				else if(chr == ']'){
+					if(	stack.getTopChar() == '[') {
+						if(!stack.isEmpty()){
+							stack.pop();
+						} else {
+							setWrong = true;
+						}
+					} else {
+						System.out.println("Klammern falsch gesetzt!");
+						setWrong = true;
+					}
+				}
+*/
+				//Sollte er aktuelle char eine Klammer-zu sein, dann wird überprüft ob die passende Klammer-auf auf dem Stack oben liegt,
+				// dann wird diese entfernt, sofern der Stack nicht leer ist, ansonsten passt etwas nicht
+			}
+		} 
+		catch (IOException e )
+		{
+			System.err.println("Fehler beim lesen der Datei!" );
+		}
+		if(!stack.isEmpty()){
+			setWrong = true;
+		}
+		//Überprüfung ob der Stack nicht leer ist.
+		if(setWrong) {
+			System.out.println("Das Programm hat syntaktische Fehler");
+		} else {
+			System.out.println("Programm ist syntaktisch in Ordnung!");
+		}
+	}
+
+}
+
+
+package aldaÜbung3;
+
+public class Stack {
+	private int arrayLength = 50;
+	private char[] stackArray = new char[arrayLength];
+	private int top;
+	public char nullChar = '\u0000';
+	//Anlegen der Variablen (StackArray, top und nullChar, wobei letzterer nicht verwendet wird in diesem Beispiel)
+	
+	
+	public Stack() {
+		top = -1;
+	}
+	//Anlegen des Konstruktors, beim Aufruf wird top auf "-1" gesetzt
+	public int getTop(){
+		return top;
+	}
+	//Methode um den aktuellen Wert von top zurückzugeben;
+	public char getTopChar(){
+		if(!isEmpty()){
+			return stackArray[top];
+		} else { 
+			return nullChar;
+		}
+	}
+	//Methode um das Element das oben auf dem Stack liegt aufzurufen;
+	public void push(char ch) {
+		top++;
+		stackArray[top] = ch;
+	}
+	//Methode um ein Element auf den Stack zu pushen, dabei wird top erst um 1 erhöht und dann an die Stelle der char übergeben
+	public char pop() {
+		char ch = stackArray[top];
+		//stackArray[top] = nullChar;
+		top--;
+		//hier könnten wir auch immer den aktuellen Wert auf den Default-Null-Char-Wert setzen
+		return ch;
+	}
+	//Methode um das oberste Element im Stack zu "entfernen", dabei wird aber nur der Zähler von top um eins heruntergesetzt
+	
+	public boolean isEmpty() {
+		/*for(int i = 0; i < stackArray.length; i++) {
+			if(stackArray[i] != nullChar) {
+				return false;
+			}
+		}
+		return true; */
+		if(top == -1){
+			return true;
+		} else {
+			return false;
+		}
+		//Überprüfung ob top == -1 ist, wenn dies der Fall ist, ist der Stack "leer"
+	}
+	public boolean isFull() {
+		/*for(int i = 0; i < stackArray.length; i++) {
+			if(stackArray[i] == nullChar) {
+				return false;
+			}
+		}
+		return true;*/
+		if(top == stackArray.length-1 ) {
+			return true;
+		} else {
+			return false;
+		}
+		//Überprüfung ob top == stackArray.length (in diesem Fall 50) ist, wenn ja, dann ist der Stack voll
+	}
+	
+}

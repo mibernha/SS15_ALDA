@@ -1,0 +1,90 @@
+
+package aldaÜbung1;
+
+public class Main {
+	
+	public static void main(String[] args) {
+		System.out.println("Bitte geben Sie 2 Studenten ein");
+		
+		Student[] studVz = new Student[2];
+		for(int i=0; i<studVz.length; i++) {
+			studVz[i] = new Student();
+			studVz[i].read();
+			studVz[i].dateTest();
+		}
+		java.util.Scanner scanner = new java.util.Scanner(System.in);
+		System.out.println("Bitte geben Sie die Matr.Nr. des gesuchten Studenten ein: ");
+		String matFinder = scanner.next();
+		for(Student studi : studVz){
+			if(matFinder.equals(studi.matrikelnummer)){
+				studi.toString();
+				return;
+			} 
+		}
+		System.out.println("Keine Übereinstimmung!");
+	}
+
+}
+package aldaÜbung1;
+
+public class Person {
+	
+	java.util.Scanner scanner = new java.util.Scanner(System.in);
+	public String name;
+	public String telefonnummer;
+	public String geburtsdatum;
+	public String getName() {
+		return name;
+	}
+	public void setName(String name) {
+		this.name = name;
+	}
+	public String getTelefonnummer() {
+		return telefonnummer;
+	}
+	public void setTelefonnummer(String telefonnummer) {
+		this.telefonnummer = telefonnummer;
+	}
+	public String getGeburtsdatum() {
+		return geburtsdatum;
+	}
+	public void setGeburtsdatum(String geburtsdatum) {
+		this.geburtsdatum = geburtsdatum;
+	}
+	public void read(){
+		System.out.println("Bitte geben Sie den Namen der Person ein: ");
+		name = scanner.nextLine();
+		System.out.println("Bitte geben Sie die Telefonnummer ein: ");
+		telefonnummer = scanner.next();
+		System.out.println("Bitte geben Sie das Geburtstag datum im Format TT/MM/JJJJ ein: ");
+		geburtsdatum = scanner.next(); 
+	}
+	public void dateTest(){
+		if(geburtsdatum.contains("/")) {
+			String[] gebTest = geburtsdatum.split("/");
+			String part1 = gebTest[0];
+			String part2 = gebTest[1];
+			String part3 = gebTest[2];
+			System.out.println("Geburtsdatum: "+part1+"/"+part2+"/"+part3);
+			int p1 = Integer.parseInt(part1);
+			int p2 = Integer.parseInt(part2);
+			int p3 = Integer.parseInt(part3);
+			if(p1<1||p2<1||p3<1||p2>12||p3>9999||p1>28&&p2==2||p1>30&&p2==4||p1>30&&p2==6||p1>30&&p2==9||p1>30&&p2==11||p1>31&&p2==1||p1>31&&p2==3||
+					p1>31&&p2==5||p1>31&&p2==7||p1>31&&p2==8||p1>31&&p2==10||p1>31&&p2==12) {
+				System.out.println("ist eine ungültige Eingabe!");
+				System.exit(0);
+			} else {
+			}
+		} else {
+			System.out.println("Falsches Datumsformat!");
+			System.exit(0);
+		}
+	}
+	public String toString(){
+		System.out.println("Name:			" + name);
+		System.out.println("Telefonnummer:		" + telefonnummer);
+		System.out.println("Geburtsdatum:		" + geburtsdatum);
+		return " ";
+	}
+
+}
